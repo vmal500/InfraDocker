@@ -1,0 +1,15 @@
+[sshd]
+# Activer le jail pour le service SSH
+enabled = true
+# Spécifier le port SSH à surveiller (par défaut)
+port = ssh
+# Utiliser le filtre "sshd" pour analyser les journaux
+filter = sshd
+# Chemin du fichier journal pour les tentatives de connexion SSH
+logpath = /var/log/auth.log
+# Nombre maximal de tentatives de connexion autorisées avant le bannissement
+maxretry = 2
+# Fenêtre de temps (en secondes) pour considérer les tentatives de connexion
+findtime = 300
+# Durée de bannissement (en secondes) pour les adresses IP bloquées
+bantime = 3600

@@ -1,0 +1,9 @@
+# Ma configuration personnalisée du serveur SSH
+
+# Désactiver la connexion en tant que root
+PermitRootLogin no
+
+# Autoriser uniquement certains utilisateurs à se connecter
+AllowUsers zion
+
+PasswordAuthentication yes

@@ -1,0 +1,60 @@
+version: '3'  # Utilisation de la version 3 de Docker Compose
+
+services:
+  # Service pour le conteneur "neo"
+  neo:
+    build:
+      context: ./neo  # Utilisation du contexte "./neo" pour construire l'image
+      dockerfile: Dockerfile  # Utilisation du Dockerfile dans le contexte pour construire l'image
+    container_name: neo
+    hostname : Neo
+    networks:
+      matrix:
+        ipv4_address: 10.0.0.2  # Attribution de l'adresse IP IPv4 "10.0.0.2" au conteneur
+    ports:
+      - "11514:514/tcp"  # Mappage du port TCP 11514 de l'hôte au port TCP 514 du conteneur
+      - "10514:514/udp"  # Mappage du port UDP 10514 de l'hôte au port UDP 514 du conteneur
+    cap_add:
+      - NET_ADMIN
+    restart: always
+
+  # Service pour le conteneur "zion"
+  zion:
+    build:
+      context: ./zion  # Utilisation du contexte "./zion" pour construire l'image
+      dockerfile: Dockerfile  # Utilisation du Dockerfile dans le contexte pour construire l'image
+    container_name: zion
+    hostname : Zion
+    networks:
+      matrix:
+        ipv4_address: 10.0.0.4  # Attribution de l'adresse IP IPv4 "10.0.0.4" au conteneur
+    ports:
+      - "2222:22/tcp"  # Mappage du port TCP 2222 de l'hôte au port TCP 22 du conteneur (SSH)
+      - "8080:80/tcp"  # Mappage du port TCP 8080 de l'hôte au port TCP 80 du conteneur (HTTP)
+    depends_on:
+      - neo
+    cap_add:
+      - NET_ADMIN
+    restart: always
+
+  # Service pour le conteneur "smith"
+  smith:
+    build:
+      context: ./smith  # Utilisation du contexte "./smith" pour construire l'image
+      dockerfile: Dockerfile  # Utilisation du Dockerfile dans le contexte pour construire l'image
+    container_name: smith
+    hostname : Smith
+    networks:
+      matrix:
+        ipv4_address: 10.0.0.3  # Attribution de l'adresse IP IPv4 "10.0.0.3" au conteneur
+    cap_add:
+      - NET_ADMIN
+    restart: always
+
+networks:
+  matrix:
+    driver: bridge  # Utilisation du driver de réseau "bridge"
+    ipam:
+      driver: default  # Utilisation du driver IPAM par défaut
+      config:
+        - subnet: 10.0.0.0/29  # Configuration du sous-réseau IPv4 pour le réseau
